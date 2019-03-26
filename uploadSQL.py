@@ -33,8 +33,8 @@ class TweepyInDB:
                 text varchar(300) DEFAULT NULL,
                 quoted_status_text varchar(300) DEFAULT NULL,
                 creation_date varchar(100) DEFAULT NULL,
-                position_X varchar(10) DEFAULT NULL,
-                position_Y varchar(10) DEFAULT NULL,
+                position_X varchar(20) DEFAULT NULL,
+                position_Y varchar(20) DEFAULT NULL,
                 PRIMARY KEY(id)
                 )""")
         self.mydb.commit()
@@ -65,8 +65,8 @@ class TweepyInDB:
             dic["name"] = ''
             
             try :
-                dic["position_X"] = str(tweet["place"]["bounding_box"]["coordinates"][0][0][1])
-                dic["position_Y"] = str(tweet["place"]["bounding_box"]["coordinates"][0][0][0])
+                dic["position_X"] = str((tweet["place"]["bounding_box"]["coordinates"][0][0][1] + tweet["place"]["bounding_box"]["coordinates"][0][1][1])/2.0)
+                dic["position_Y"] = str((tweet["place"]["bounding_box"]["coordinates"][0][0][0] + tweet["place"]["bounding_box"]["coordinates"][0][2][0])/2.0)
             except :
                 print("error : localisation doesn't exists")
                 continue
@@ -87,8 +87,7 @@ class TweepyInDB:
             except:
                 dic["quoted_status_text"] = None
             #deux boucles pour régler le problème des émoticones
-            
-            print(dic["quoted_status_text"])
+        
             
             if 'text' in tweet:  # only messages contains 'text' field is a tweet
                 try:
@@ -99,18 +98,6 @@ class TweepyInDB:
                     continue          
 
 
-            # print(tweet['created_at'])  # when the tweet posted
-            # print(tweet['text'])  # content of the tweet
-            #
-            # print(tweet['user']['id'])  # id of the user who posted the tweet
-            # print(tweet['user']['name'])  # name of the user, e.g. "Wei Xu"
-            # print(tweet['user']['screen_name'])  # name of the user account, e.g. "cocoweixu"
-            #
-            # hashtags = []
-            # for hashtag in tweet['entities']['hashtags']:
-            #     hashtags.append(hashtag['text'])
-            # print(hashtags)
-            # print('\n')
 
 
 objet = TweepyInDB('data3.json')
@@ -118,5 +105,6 @@ objet = TweepyInDB('data3.json')
 #objet.createTable()
 #objet.insertIntoTable()
 #objet.viderTable()
+
 
 
